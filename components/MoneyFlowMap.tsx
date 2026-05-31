@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { financialSummary, moneyFlows } from "@/data/mockFinanceData";
+import { useFinanceData } from "@/lib/useFinanceData";
 
 const tagStyles: Record<string, string> = {
   "High leak": "bg-red-100 text-red-700 border-red-200",
@@ -14,6 +14,7 @@ const tagStyles: Record<string, string> = {
 };
 
 export default function MoneyFlowMap() {
+  const { financialSummary, moneyFlows } = useFinanceData();
   return (
     <section id="money-flow" className="py-16 sm:py-20 px-4">
       <div className="max-w-5xl mx-auto">

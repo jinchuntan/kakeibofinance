@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { UtensilsCrossed, CreditCard, Wine, Droplets } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { moneyLeaks } from "@/data/mockFinanceData";
+import { useFinanceData } from "@/lib/useFinanceData";
 
 const iconMap: Record<string, React.ElementType> = {
   UtensilsCrossed,
@@ -18,6 +18,7 @@ const severityStyles: Record<string, { border: string; bg: string; dot: string }
 };
 
 export default function MoneyLeaks() {
+  const { moneyLeaks } = useFinanceData();
   const totalRecoverable = moneyLeaks.reduce((s, l) => s + l.recoverable, 0);
 
   return (

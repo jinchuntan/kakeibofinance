@@ -23,45 +23,41 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import {
-  financialSummary,
-  spendingCategories,
-  dailySpending,
-  plannedVsActual,
-} from "@/data/mockFinanceData";
-
-const summaryCards = [
-  {
-    label: "Monthly Income",
-    value: financialSummary.monthlyIncome,
-    icon: DollarSign,
-    color: "text-kakeibo-green",
-    bg: "bg-green-50",
-  },
-  {
-    label: "Total Spending",
-    value: financialSummary.totalSpending,
-    icon: TrendingDown,
-    color: "text-kakeibo-accent",
-    bg: "bg-orange-50",
-  },
-  {
-    label: "Current Savings",
-    value: financialSummary.currentSavings,
-    icon: PiggyBank,
-    color: "text-kakeibo-brown",
-    bg: "bg-amber-50",
-  },
-  {
-    label: "Overspend Risk",
-    value: financialSummary.projectedOverspendRisk,
-    icon: AlertTriangle,
-    color: "text-kakeibo-red",
-    bg: "bg-red-50",
-  },
-];
+import { useFinanceData } from "@/lib/useFinanceData";
 
 export default function Dashboard() {
+  const { financialSummary, spendingCategories, dailySpending, plannedVsActual } = useFinanceData();
+
+  const summaryCards = [
+    {
+      label: "Monthly Income",
+      value: financialSummary.monthlyIncome,
+      icon: DollarSign,
+      color: "text-kakeibo-green",
+      bg: "bg-green-50",
+    },
+    {
+      label: "Total Spending",
+      value: financialSummary.totalSpending,
+      icon: TrendingDown,
+      color: "text-kakeibo-accent",
+      bg: "bg-orange-50",
+    },
+    {
+      label: "Current Savings",
+      value: financialSummary.currentSavings,
+      icon: PiggyBank,
+      color: "text-kakeibo-brown",
+      bg: "bg-amber-50",
+    },
+    {
+      label: "Overspend Risk",
+      value: financialSummary.projectedOverspendRisk,
+      icon: AlertTriangle,
+      color: "text-kakeibo-red",
+      bg: "bg-red-50",
+    },
+  ];
   return (
     <section id="dashboard" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">

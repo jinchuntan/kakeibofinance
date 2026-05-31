@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Droplets, Zap, Target, Heart } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { aiInsights } from "@/data/mockFinanceData";
+import { useFinanceData } from "@/lib/useFinanceData";
 
 const iconMap: Record<string, React.ElementType> = {
   Droplets,
@@ -13,6 +13,7 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export default function AIInsightCards() {
+  const { aiInsights } = useFinanceData();
   return (
     <section id="insights" className="py-16 sm:py-20 px-4">
       <div className="max-w-5xl mx-auto">
