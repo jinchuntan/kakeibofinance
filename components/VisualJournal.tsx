@@ -6,19 +6,45 @@ import { PenLine, Sparkles, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { journalQuestions, mockReflectionSummary } from "@/data/mockFinanceData";
+import { journalQuestions } from "@/data/mockFinanceData";
 
 export default function VisualJournal() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showSummary, setShowSummary] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [reflectionText, setReflectionText] = useState("");
 
-  const handleGenerate = () => {
+  const hasContent = Object.values(answers).some((a) => a.trim().length > 0);
+
+  const handleGenerate = async () => {
+    if (!hasContent) return;
     setGenerating(true);
-    setTimeout(() => {
-      setGenerating(false);
+
+    const entries = journalQuestions.map((q, i) => ({
+      question: q,
+      answer: answers[i] || "",
+    }));
+
+    try {
+      const response = await fetch("/api/reflect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ entries }),
+      });
+
+      if (!response.ok) throw new Error("Failed to generate reflection");
+
+      const data = await response.json();
+      setReflectionText(data.summary);
       setShowSummary(true);
-    }, 1800);
+    } catch {
+      setReflectionText(
+        "I could not generate your reflection right now. Your journal entries are saved — please try again shortly."
+      );
+      setShowSummary(true);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const today = new Date();
@@ -88,7 +114,7 @@ export default function VisualJournal() {
               <div className="text-center pt-2">
                 <Button
                   onClick={handleGenerate}
-                  disabled={generating}
+                  disabled={generating || !hasContent}
                   className="bg-kakeibo-dark hover:bg-kakeibo-brown text-white rounded-xl px-6"
                 >
                   {generating ? (
@@ -127,7 +153,7 @@ export default function VisualJournal() {
                         <span className="stamp">Reflection Generated</span>
                       </div>
                       <p className="text-sm leading-relaxed text-foreground">
-                        {mockReflectionSummary}
+                        {reflectionText}
                       </p>
                     </div>
                   </div>

@@ -6,7 +6,6 @@ import { MessageCircle, Send, Sparkles, User } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { chatResponses } from "@/data/mockFinanceData";
 
 interface Message {
   role: "user" | "assistant";
@@ -32,19 +31,56 @@ export default function MoneySenseiChat() {
     }
   }, [messages, typing]);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     const userMsg: Message = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput("");
     setTyping(true);
 
-    setTimeout(() => {
-      const response =
-        chatResponses[text] ||
-        "That is a thoughtful question. Based on your spending pattern, the most impactful change you can make this week is to set a clear boundary on food delivery orders and review your active subscriptions. Small, consistent actions lead to meaningful savings over time.";
-      setMessages((prev) => [...prev, { role: "assistant", content: response }]);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updatedMessages }),
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error("Failed to get response");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = "";
+
+      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        assistantContent += decoder.decode(value, { stream: true });
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: assistantContent,
+          };
+          return updated;
+        });
+      }
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
+        },
+      ]);
+    } finally {
       setTyping(false);
-    }, 1200);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -128,7 +164,7 @@ export default function MoneySenseiChat() {
                 ))}
               </AnimatePresence>
 
-              {typing && (
+              {typing && (messages.length === 0 || messages[messages.length - 1].role === "user") && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
