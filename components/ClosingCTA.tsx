@@ -2,13 +2,10 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
 
-interface ClosingCTAProps {
-  onBegin: () => void;
-}
-
-export default function ClosingCTA({ onBegin }: ClosingCTAProps) {
+export default function ClosingCTA() {
   return (
     <section className="py-24 px-4">
       <motion.div
@@ -30,14 +27,13 @@ export default function ClosingCTA({ onBegin }: ClosingCTAProps) {
             This is not about guilt. It is about clarity.
           </p>
         </div>
-        <Button
-          size="lg"
-          onClick={onBegin}
-          className="bg-kakeibo-dark hover:bg-kakeibo-brown text-white rounded-xl px-8"
+        <Link
+          href="/journal"
+          className={buttonVariants({ size: "lg", className: "bg-kakeibo-dark hover:bg-kakeibo-brown text-white rounded-xl px-8" })}
         >
           Begin Your Money Reflection
           <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
+        </Link>
       </motion.div>
 
       {/* Footer */}

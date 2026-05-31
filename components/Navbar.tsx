@@ -1,40 +1,45 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Flow", href: "#money-flow" },
-  { label: "Dashboard", href: "#dashboard" },
-  { label: "Agents", href: "#agents" },
-  { label: "Chat", href: "#chat" },
-  { label: "Journal", href: "#reflection" },
-  { label: "Ritual", href: "#action-plan" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Chat", href: "/chat" },
+  { label: "Journal", href: "/journal" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-        <a href="#" className="flex items-center gap-2 font-semibold text-lg tracking-tight">
+        <Link href="/" className="flex items-center gap-2 font-semibold text-lg tracking-tight">
           <BookOpen className="w-5 h-5 text-kakeibo-accent" />
           <span>Kakeibo AI</span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm transition-colors ${
+                pathname === link.href
+                  ? "text-kakeibo-accent font-medium"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -59,14 +64,18 @@ export default function Navbar() {
           >
             <div className="px-4 py-3 flex flex-col gap-2">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  className={`text-sm py-2 transition-colors ${
+                    pathname === link.href
+                      ? "text-kakeibo-accent font-medium"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </motion.div>

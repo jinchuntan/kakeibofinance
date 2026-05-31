@@ -1,23 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, FileText, Camera, PenLine, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-interface UploadSectionProps {
-  onAnalyze: () => void;
-}
-
-export default function UploadSection({ onAnalyze }: UploadSectionProps) {
+export default function UploadSection() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleAnalyze = () => {
     setLoading(true);
     setTimeout(() => {
-      setLoading(false);
-      onAnalyze();
+      router.push("/dashboard");
     }, 2500);
   };
 

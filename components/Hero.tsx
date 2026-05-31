@@ -2,14 +2,10 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Receipt, ArrowDown, BookOpen, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
 
-interface HeroProps {
-  onStartReflection: () => void;
-  onViewDashboard: () => void;
-}
-
-export default function Hero({ onStartReflection, onViewDashboard }: HeroProps) {
+export default function Hero() {
   return (
     <section className="min-h-[100dvh] flex items-center justify-center pt-14 px-4 relative overflow-hidden">
       <div className="absolute top-20 right-[10%] w-64 h-64 rounded-full bg-kakeibo-warm/40 blur-3xl pointer-events-none" />
@@ -39,22 +35,19 @@ export default function Hero({ onStartReflection, onViewDashboard }: HeroProps) 
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              onClick={onStartReflection}
-              className="bg-kakeibo-dark hover:bg-kakeibo-brown text-white rounded-xl px-6"
+            <a
+              href="#upload"
+              className={buttonVariants({ size: "lg", className: "bg-kakeibo-dark hover:bg-kakeibo-brown text-white rounded-xl px-6" })}
             >
               Start My Money Ritual
               <ArrowDown className="ml-2 w-4 h-4" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={onViewDashboard}
-              className="rounded-xl px-6 border-kakeibo-tan hover:bg-kakeibo-warm"
+            </a>
+            <Link
+              href="/dashboard"
+              className={buttonVariants({ size: "lg", variant: "outline", className: "rounded-xl px-6 border-kakeibo-tan hover:bg-kakeibo-warm" })}
             >
               View Demo
-            </Button>
+            </Link>
           </div>
         </motion.div>
 
